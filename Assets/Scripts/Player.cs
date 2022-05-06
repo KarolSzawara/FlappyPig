@@ -7,8 +7,8 @@ public class Player : MonoBehaviour
     public Sprite[] sprites;
     private int spriteIndex;
     private Vector3 direction;
-    public float gravity = -1.8f;
-    public float strength = 1f;
+    public float gravity = -2.8f;
+    public float strength = 2f;
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -17,6 +17,14 @@ public class Player : MonoBehaviour
     private void Start()
     {
         InvokeRepeating(nameof(AnimateSprite),0.15f,0.15f);
+    }
+
+    private void OnEnable()
+    {
+        Vector3 postion = transform.position;
+        postion.y = 0f;
+        transform.position = postion;
+        direction = Vector3.zero;
     }
     private void Update()
     {
@@ -49,5 +57,16 @@ public class Player : MonoBehaviour
         }
         spriteRenderer.sprite = sprites[spriteIndex];
     }
-  
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Obstacle")
+        {
+            FindObjectOfType<GameManager>().GameOver();
+
+        }
+        else if (collision.gameObject.tag == "Scoring")
+        {
+            FindObjectOfType<GameManager>().IncreaseScore();
+        }
+    }
 }
