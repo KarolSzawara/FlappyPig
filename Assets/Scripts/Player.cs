@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private SpriteRenderer spriteRenderer;
+    public SpriteRenderer spriteRenderer;
+    private ParticleSystem particleSystem;
     public Sprite[] sprites;
     private int spriteIndex;
     private Vector3 direction;
@@ -12,11 +13,12 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        particleSystem = GetComponent<ParticleSystem>();
     }
 
     private void Start()
     {
-        InvokeRepeating(nameof(AnimateSprite),0.15f,0.15f);
+        InvokeRepeating(nameof(AnimateSprite), 0.15f, 0.15f);
     }
 
     private void OnEnable()
@@ -28,10 +30,10 @@ public class Player : MonoBehaviour
     }
     private void Update()
     {
-       if(Input.touchCount>0)
+        if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-            
+
             if (touch.phase == TouchPhase.Began)
             {
                 direction = Vector3.up * strength;
@@ -40,9 +42,9 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             direction = Vector3.up * strength;
-          
+
         }
-       
+
         direction.y += gravity * Time.deltaTime;
         transform.position += direction * Time.deltaTime;
 
@@ -62,7 +64,8 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "Obstacle")
         {
             FindObjectOfType<GameManager>().GameOver();
-
+            particleSystem.Play();
+            spriteRenderer.enabled = false;
         }
         else if (collision.gameObject.tag == "Scoring")
         {

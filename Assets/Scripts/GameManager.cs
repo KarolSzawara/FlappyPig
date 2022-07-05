@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     // Start is called before the first frame update
     private int score;
+    private SpriteRenderer spriteRenderer;
 
     public Player player;
     public Text scoreText;
@@ -14,6 +15,12 @@ public class GameManager : MonoBehaviour
     public GameObject playButton;
 
     public GameObject gameOver;
+
+    private void Start()
+    {
+        spriteRenderer = GameObject.Find("Pig1").GetComponent<Player>().spriteRenderer;
+    }
+
     private void Awake()
     {
         Application.targetFrameRate = 60;
@@ -22,6 +29,7 @@ public class GameManager : MonoBehaviour
     }
     public void Play()
     {
+        spriteRenderer.enabled = true;
         score = 0;
         scoreText.text = score.ToString();
         gameOver.SetActive(false);
@@ -30,7 +38,7 @@ public class GameManager : MonoBehaviour
         player.enabled = transform;
 
         Pipes[] pipes = FindObjectsOfType<Pipes>();
-        for(int i = 0; i < pipes.Length; i++)
+        for (int i = 0; i < pipes.Length; i++)
         {
             Destroy(pipes[i].gameObject);
         }
